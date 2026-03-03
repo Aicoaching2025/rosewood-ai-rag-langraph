@@ -1,0 +1,44 @@
+[
+  {
+    "id": "doc_001",
+    "title": "Introduction to Retrieval-Augmented Generation",
+    "content": "Retrieval-Augmented Generation (RAG) is an AI framework that enhances large language model outputs by retrieving relevant information from external knowledge bases before generating responses. Unlike traditional LLMs that rely solely on training data, RAG systems dynamically fetch context from document stores or vector indexes at inference time. This approach significantly reduces hallucination and improves factual accuracy. A typical RAG pipeline consists of three stages: document ingestion, retrieval via similarity search, and generation augmented with retrieved context. Key considerations include chunk size optimization, embedding model selection, retrieval strategy, and context window management.",
+    "source": "AI Engineering Handbook",
+    "category": "ai_concepts"
+  },
+  {
+    "id": "doc_002",
+    "title": "LangGraph Stateful AI Agent Workflows",
+    "content": "LangGraph is a framework for building stateful multi-step AI agent workflows using a graph-based architecture. Unlike linear chains, LangGraph enables conditional branching, parallel execution, cycles, and human-in-the-loop checkpoints. The core abstraction is a StateGraph where each node modifies a shared typed state. Edges can be conditional, meaning the next node depends on current state. Key concepts include TypedDict state definitions, conditional edges for routing, cycles for iterative refinement, and checkpointing for persistence.",
+    "source": "LangGraph Documentation",
+    "category": "frameworks"
+  },
+  {
+    "id": "doc_003",
+    "title": "FastAPI for Production ML Systems",
+    "content": "FastAPI is a modern Python web framework for building high-performance APIs with automatic validation and documentation. For ML deployment it offers async support, Pydantic validation, automatic OpenAPI docs, dependency injection, and streaming responses. Best practices include loading models at startup, health check endpoints, background tasks for heavy processing, rate limiting, API versioning, and structured logging.",
+    "source": "ML Engineering Best Practices",
+    "category": "frameworks"
+  },
+  {
+    "id": "doc_004",
+    "title": "Vector Databases and Embedding Strategies",
+    "content": "Vector databases are storage systems optimized for similarity search over high-dimensional embeddings. Documents are converted into dense vectors using embedding models then stored for nearest-neighbor retrieval. ChromaDB is a lightweight open-source option that runs in-process. Key strategies include choosing the right embedding model, chunk size optimization with overlap, metadata filtering, and hybrid search combining dense and sparse matching.",
+    "source": "Vector Search Guide",
+    "category": "infrastructure"
+  },
+  {
+    "id": "doc_005",
+    "title": "Document Chunking Pipelines",
+    "content": "Document chunking splits large documents into smaller segments for embedding and retrieval. Chunking strategy directly impacts RAG quality. Common approaches include fixed-size chunking with overlap, semantic chunking at paragraph boundaries, recursive chunking, and sentence-window chunking. Overlap of 10 to 20 percent is standard. Metadata enrichment during chunking enables filtered retrieval and citation.",
+    "source": "NLP Pipeline Patterns",
+    "category": "data_processing"
+  },
+  {
+    "id": "doc_006",
+    "title": "Agent Design Patterns for Enterprise AI",
+    "content": "Enterprise AI agents need design patterns beyond simple interactions. The Router pattern classifies requests to specialized handlers. Retrieval-Evaluate-Generate adds a quality gate filtering irrelevant context. Iterative Refinement uses graph cycles to re-retrieve with modified queries. Human-in-the-Loop inserts approval checkpoints. Fallback Chain defines degradation paths. Production agents need observability via structured logging, tracing, and latency tracking.",
+    "source": "Enterprise AI Architecture",
+    "category": "architecture"
+  }
+]

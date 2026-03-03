@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rosewood AI - Document Research Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#09090f;--card:#15151e;--card-h:#1b1b28;--input:#191924;--bdr:#252535;--bdr-f:#c084fc;--t1:#f0f0f5;--t2:#8888a0;--t3:#555570;--accent:#c084fc;--accent-g:rgba(192,132,252,.12);--accent-h:#d4a5ff;--ok:#34d399;--ok-bg:rgba(52,211,153,.08);--err:#f87171;--err-bg:rgba(248,113,113,.08);--warn:#fbbf24;--warn-bg:rgba(251,191,36,.08);--blue:#60a5fa;--blue-bg:rgba(96,165,250,.08);--r:14px;--rs:10px;--rx:7px;--tr:.2s cubic-bezier(.4,0,.2,1);--f:'DM Sans',-apple-system,sans-serif;--fm:'JetBrains Mono','SF Mono',monospace}
+html{font-size:15px}body{font-family:var(--f);background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;top:-40%;left:-20%;width:80vw;height:80vw;background:radial-gradient(circle,rgba(192,132,252,.05)0%,transparent 70%);pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.header{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0 2rem}
+.logo{display:flex;align-items:center;gap:.75rem}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#c084fc,#f472b6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff;box-shadow:0 2px 12px rgba(192,132,252,.3)}
+.logo-text{font-size:1.15rem;font-weight:600;letter-spacing:-.02em}
+.logo-text span{color:var(--t3);font-weight:400;margin-left:.3rem;font-size:.82rem}
+.header-links{display:flex;gap:.4rem}
+.header-links a{padding:.42rem .9rem;border-radius:var(--rx);font-size:.78rem;font-weight:500;text-decoration:none;color:var(--t2);transition:var(--tr);border:1px solid transparent}
+.header-links a:hover{color:var(--t1);background:var(--card);border-color:var(--bdr)}
+.header-links a.primary{background:var(--accent);color:#1a1a2e;border-color:var(--accent);font-weight:600}
+.hero{text-align:center;padding:1.5rem 0 2.5rem}
+.hero h1{font-size:2.6rem;font-weight:700;letter-spacing:-.04em;line-height:1.1;background:linear-gradient(135deg,var(--t1),var(--t2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--t2);font-size:.92rem;margin-top:.6rem;line-height:1.6;max-width:600px;margin-inline:auto}
+.tech-badges{display:flex;justify-content:center;gap:.4rem;margin-top:1rem}
+.tb{padding:.3rem .75rem;border-radius:99px;font-size:.7rem;font-weight:600;letter-spacing:.04em}
+.tb.lg{border:1px solid rgba(192,132,252,.3);color:var(--accent);background:var(--accent-g)}
+.tb.fa{border:1px solid rgba(52,211,153,.3);color:var(--ok);background:var(--ok-bg)}
+.tb.py{border:1px solid rgba(251,191,36,.3);color:var(--warn);background:var(--warn-bg)}
+.tb.cr{border:1px solid rgba(96,165,250,.3);color:var(--blue);background:var(--blue-bg)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:1.1rem 1.2rem}
+.stat-label{font-size:.68rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:.4rem}
+.stat-value{font-size:1.5rem;font-weight:700;letter-spacing:-.03em}
+.stat-value.ok{color:var(--ok)}.stat-value.accent{color:var(--accent)}
+.stat-sub{font-size:.68rem;color:var(--t3);margin-top:.2rem}
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:1.4rem 1.5rem}
+.card-title{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem}
+.card-title .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+textarea,input[type="number"],select{width:100%;padding:.7rem .85rem;background:var(--input);border:1px solid var(--bdr);border-radius:var(--rs);color:var(--t1);font-family:var(--f);font-size:.88rem;transition:var(--tr);outline:none}
+textarea:focus,input:focus,select:focus{border-color:var(--bdr-f);box-shadow:0 0 0 3px var(--accent-g)}
+textarea{min-height:80px;resize:vertical;line-height:1.6}
+select{max-width:180px;cursor:pointer}
+.input-group{margin-bottom:.8rem}
+.input-group label{display:block;font-size:.7rem;font-weight:500;color:var(--t3);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:var(--rs);font-family:var(--f);font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:var(--tr)}
+.btn-primary{background:var(--accent);color:#1a1a2e;box-shadow:0 2px 12px rgba(192,132,252,.25)}
+.btn-primary:hover{background:var(--accent-h);transform:translateY(-1px)}
+.btn-secondary{background:var(--input);color:var(--t2);border:1px solid var(--bdr)}
+.btn-secondary:hover{background:var(--card-h);color:var(--t1)}
+.btn-row{display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap}
+.result-panel{margin-top:1rem;padding:1.1rem;border-radius:var(--rs);border:1px solid var(--bdr);background:var(--input);display:none}
+.result-panel.visible{display:block;animation:fadeSlide .35s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.answer-text{font-size:.88rem;line-height:1.7;color:var(--t1);margin-bottom:1rem}
+.citation{display:flex;align-items:center;gap:.5rem;padding:.4rem .7rem;background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.15);border-radius:var(--rx);margin-bottom:.3rem;font-size:.76rem}
+.citation-score{font-family:var(--fm);color:var(--accent);font-weight:600;font-size:.72rem}
+.citation-title{color:var(--t2)}
+.citation-source{color:var(--t3);margin-left:auto;font-size:.68rem}
+.conf-badge{display:inline-flex;padding:.25rem .65rem;border-radius:99px;font-size:.7rem;font-weight:600}
+.conf-badge.high{background:var(--ok-bg);color:var(--ok);border:1px solid rgba(52,211,153,.2)}
+.conf-badge.med{background:var(--warn-bg);color:var(--warn);border:1px solid rgba(251,191,36,.2)}
+.conf-badge.low{background:var(--err-bg);color:var(--err);border:1px solid rgba(248,113,113,.2)}
+.trace-node{display:flex;align-items:center;gap:.5rem;padding:.35rem 0;position:relative}
+.trace-node::before{content:'';position:absolute;left:11px;top:26px;bottom:-6px;width:1px;background:var(--bdr)}
+.trace-node:last-child::before{display:none}
+.trace-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;flex-shrink:0;z-index:1}
+.trace-dot.done{background:var(--ok-bg);color:var(--ok);border:1px solid rgba(52,211,153,.3)}
+.trace-dot.cycle{background:var(--accent-g);color:var(--accent);border:1px solid rgba(192,132,252,.3)}
+.trace-name{font-size:.76rem;font-weight:500;color:var(--t1)}
+.trace-time{font-size:.68rem;font-family:var(--fm);color:var(--t3);margin-left:auto}
+.trace-badge{font-size:.6rem;padding:.1rem .4rem;border-radius:99px;background:var(--accent-g);color:var(--accent);border:1px solid rgba(192,132,252,.2);margin-left:.3rem}
+.endpoint-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;background:var(--input);border-radius:var(--rx);border:1px solid transparent;transition:var(--tr);margin-bottom:.4rem}
+.endpoint-item:hover{border-color:var(--bdr)}
+.method-badge{padding:.16rem .45rem;border-radius:5px;font-size:.6rem;font-weight:700;font-family:var(--fm);letter-spacing:.04em;min-width:38px;text-align:center}
+.method-badge.get{background:rgba(52,211,153,.1);color:var(--ok)}
+.method-badge.post{background:rgba(192,132,252,.1);color:var(--accent)}
+.method-badge.delete{background:rgba(248,113,113,.1);color:var(--err)}
+.endpoint-path{font-family:var(--fm);font-size:.76rem;color:var(--t1);font-weight:500}
+.endpoint-desc{font-size:.68rem;color:var(--t3);margin-left:auto}
+.doc-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .7rem;background:var(--input);border-radius:var(--rx);margin-bottom:.3rem;font-size:.78rem}
+.doc-title{color:var(--t1);font-weight:500}
+.doc-chunks{font-family:var(--fm);color:var(--t3);font-size:.7rem;margin-left:auto}
+.spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+.spinner.active{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.footer{text-align:center;padding:2.5rem 0 1rem;color:var(--t3);font-size:.72rem}
+.footer a{color:var(--accent);text-decoration:none}
+@media(max-width:768px){.stats-row{grid-template-columns:1fr 1fr}.main-grid{grid-template-columns:1fr}.hero h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <div class="logo"><div class="logo-icon">R</div><div class="logo-text">Rosewood AI<span>Research Agent</span></div></div>
+  <div class="header-links"><a href="/docs" target="_blank">Swagger</a><a href="/graph/info" target="_blank">Graph</a><a href="/documents" target="_blank">Docs</a><a href="/docs" target="_blank" class="primary">API Docs</a></div>
+</header>
+<section class="hero">
+  <h1>Document Research Agent</h1>
+  <p>RAG-powered knowledge retrieval with a LangGraph agent that searches, evaluates, and synthesizes answers from your document store with cited sources.</p>
+  <div class="tech-badges"><span class="tb lg">LangGraph</span><span class="tb fa">FastAPI</span><span class="tb py">Python</span><span class="tb cr">ChromaDB</span></div>
+</section>
+<section class="stats-row">
+  <div class="stat-card"><div class="stat-label">Documents</div><div class="stat-value accent" id="docCount">0</div><div class="stat-sub" id="chunkCount">0 chunks</div></div>
+  <div class="stat-card"><div class="stat-label">Queries</div><div class="stat-value" id="queryCount">0</div><div class="stat-sub">this session</div></div>
+  <div class="stat-card"><div class="stat-label">Avg Confidence</div><div class="stat-value ok" id="avgConf">--</div><div class="stat-sub">answer quality</div></div>
+  <div class="stat-card"><div class="stat-label">Cycles</div><div class="stat-value accent" id="cycleRate">0%</div><div class="stat-sub">retrieval retries</div></div>
+</section>
+<div class="main-grid">
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>Ask a Question</div>
+    <div class="input-group"><label>Query</label><textarea id="inputQuery" placeholder="Ask anything about the knowledge base...">What is RAG and how does it reduce hallucination?</textarea></div>
+    <div style="display:flex;gap:.5rem"><div class="input-group" style="flex:1"><label>Top K</label><input type="number" id="inputTopK" value="5" min="1" max="20"></div><div class="input-group" style="flex:1"><label>Category</label><select id="inputCat"><option value="">All</option><option value="ai_concepts">AI Concepts</option><option value="frameworks">Frameworks</option><option value="infrastructure">Infrastructure</option><option value="data_processing">Data Processing</option><option value="architecture">Architecture</option></select></div></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="queryBtn" onclick="runQuery()"><span id="spinner" class="spinner"></span>Research</button>
+      <button class="btn btn-secondary" onclick="loadQ('rag')">RAG</button>
+      <button class="btn btn-secondary" onclick="loadQ('lang')">LangGraph</button>
+      <button class="btn btn-secondary" onclick="loadQ('cmp')">Compare</button>
+    </div>
+    <div class="result-panel" id="resultPanel">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem;flex-wrap:wrap">
+        <span class="conf-badge" id="confBadge"></span>
+        <span style="font-size:.72rem;color:var(--t3)">Type: <strong id="resType" style="color:var(--t2)"></strong></span>
+        <span style="font-size:.72rem;color:var(--t3);margin-left:auto" id="resTime"></span>
+      </div>
+      <div class="answer-text" id="answerText"></div>
+      <div style="font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:.4rem">Sources</div>
+      <div id="citations"></div>
+      <div style="font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:.4rem;margin-top:.8rem">Graph Execution</div>
+      <div id="graphTrace"></div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:.7rem">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>API Endpoints</div>
+      <div class="endpoint-item"><span class="method-badge post">POST</span><span class="endpoint-path">/query</span><span class="endpoint-desc">RAG agent</span></div>
+      <div class="endpoint-item"><span class="method-badge post">POST</span><span class="endpoint-path">/query/stream</span><span class="endpoint-desc">Stream nodes</span></div>
+      <div class="endpoint-item"><span class="method-badge post">POST</span><span class="endpoint-path">/ingest</span><span class="endpoint-desc">Add doc</span></div>
+      <div class="endpoint-item"><span class="method-badge post">POST</span><span class="endpoint-path">/ingest/file</span><span class="endpoint-desc">Upload file</span></div>
+      <div class="endpoint-item"><span class="method-badge get">GET</span><span class="endpoint-path">/documents</span><span class="endpoint-desc">List docs</span></div>
+      <div class="endpoint-item"><span class="method-badge delete">DEL</span><span class="endpoint-path">/documents/{id}</span><span class="endpoint-desc">Remove</span></div>
+      <div class="endpoint-item"><span class="method-badge get">GET</span><span class="endpoint-path">/graph/info</span><span class="endpoint-desc">Topology</span></div>
+      <div class="endpoint-item"><span class="method-badge get">GET</span><span class="endpoint-path">/stats</span><span class="endpoint-desc">Analytics</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Knowledge Base</div>
+      <div id="docList" style="color:var(--t3);font-size:.8rem">Loading...</div>
+    </div>
+  </div>
+</div>
+<footer class="footer">Built by <a href="#">Candace Grant</a> &middot; Birds and Roses LLC &middot; LangGraph + FastAPI + Python + ChromaDB</footer>
+</div>
+<script>
+const qs={rag:"What is RAG and how does it reduce hallucination?",lang:"How does LangGraph handle conditional routing and cycles?",cmp:"Compare LangGraph and traditional LangChain chains for complex workflows"};
+function loadQ(k){document.getElementById('inputQuery').value=qs[k]}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+async function runQuery(){
+  const q=document.getElementById('inputQuery').value.trim();if(!q)return;
+  const topK=parseInt(document.getElementById('inputTopK').value)||5;
+  const cat=document.getElementById('inputCat').value||null;
+  const btn=document.getElementById('queryBtn'),sp=document.getElementById('spinner');
+  btn.disabled=true;sp.classList.add('active');
+  try{const res=await fetch('/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q,top_k:topK,category_filter:cat})});const d=await res.json();showResult(d);refreshStats();}catch(e){console.error(e)}
+  finally{btn.disabled=false;sp.classList.remove('active')}
+}
+function showResult(d){
+  const p=document.getElementById('resultPanel');const conf=d.confidence||0;
+  const cb=document.getElementById('confBadge');
+  cb.textContent=(conf*100).toFixed(0)+'% confidence';
+  cb.className='conf-badge '+(conf>=.5?'high':conf>=.25?'med':'low');
+  document.getElementById('resType').textContent=d.query_analysis?.type||'--';
+  const ge=d.graph_execution||{};
+  document.getElementById('resTime').textContent=(ge.total_processing_time_ms||0).toFixed(1)+'ms';
+  document.getElementById('answerText').textContent=d.answer||'';
+  document.getElementById('citations').innerHTML=(d.citations||[]).map(c=>'<div class="citation"><span class="citation-score">'+(c.relevance_score*100).toFixed(0)+'%</span><span class="citation-title">'+esc(c.title)+'</span><span class="citation-source">'+esc(c.source)+'</span></div>').join('');
+  const nodes=ge.nodes_executed||[];const times=ge.node_timings_ms||{};
+  document.getElementById('graphTrace').innerHTML=nodes.map(n=>{const isCy=n.includes('retry')||n==='expand_search';return '<div class="trace-node"><div class="trace-dot '+(isCy?'cycle':'done')+'">&#10003;</div><div class="trace-name">'+n+'</div>'+(isCy?'<span class="trace-badge">cycle</span>':'')+'<div class="trace-time">'+(times[n]!==undefined?times[n]+'ms':'--')+'</div></div>';}).join('');
+  p.classList.add('visible');
+}
+async function refreshStats(){
+  try{const[h,s,docs]=await Promise.all([fetch('/health').then(r=>r.json()),fetch('/stats').then(r=>r.json()),fetch('/documents').then(r=>r.json())]);
+  const vs=h.vector_store_stats||{};
+  document.getElementById('docCount').textContent=vs.total_documents||0;
+  document.getElementById('chunkCount').textContent=(vs.total_chunks||0)+' chunks';
+  document.getElementById('queryCount').textContent=s.total_queries||0;
+  document.getElementById('avgConf').textContent=s.total_queries>0?(s.avg_confidence*100).toFixed(0)+'%':'--';
+  document.getElementById('cycleRate').textContent=s.total_queries>0?(s.cycle_rate*100).toFixed(0)+'%':'0%';
+  const dl=document.getElementById('docList');const de=Object.entries(docs.documents||{});
+  dl.innerHTML=de.length===0?'No documents.':de.map(([id,d])=>'<div class="doc-item"><span class="doc-title">'+esc(d.title)+'</span><span class="doc-chunks">'+d.chunks+' chunks</span></div>').join('');}catch(e){}}
+refreshStats();setInterval(refreshStats,8000);
+document.getElementById('inputQuery').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))runQuery()});
+</script>
+</body>
+</html>
